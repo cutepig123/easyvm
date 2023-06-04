@@ -1,0 +1,86 @@
+E:\test\easyVM_Small_
+指令解析,cpu虚拟
+设备虚拟,比如display, DMA, floppy, harddisk, keyboard, PIC, printer, RTC, timer,serial
+程序flow, 架构
+
+低调发布easyVM 0.2版
+
+简介：
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+easyVM是一个简单的虚拟机。
+0.1版本只支持8086指令集和一些简单的I/O设备，只支持英文文本显示方式。
+0.2版本主要是在0.1版基础上加了一小部分32位指令（push eax等），使得easyVM可以运行MS-DOS 6.22自带的大部分程序。
+
+文件说明：
+＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+Bios\Bios.bin        Bios程序
+Bios\BiosData.bin    CMOS数据区
+DOS.IMG            MS-DOS 6.22的镜像
+easyVM.exe        easyVM主程序
+easyVM.ini        easyVM的配置文件
+Readme.txt        本说明文本
+TC.IMG            含有Trubo C 2.0的软盘镜像
+Dos622c.img        硬盘镜像
+
+easyVM.ini配置文件
+[Memory]
+;MB
+Size=32
+
+[IMG]
+A=DOS.IMG
+B=TC.IMG
+C=
+cylinders=20
+heads=16
+spt=63
+
+[Boot]
+Boot=A
+
+程序流程:
+WinMain
+	VMInit
+		CPUInit
+			设置cpu从eCPU.cs=0xf000;eCPU.ip=0xfff0;开始执行
+			初始化InTable,和outTable
+		malloc memory for MemoryStart
+		read BIOS\\BiosData.bin to MemoryStart+0x400, size=0x100
+		set boot drive
+			*(char *)(MemoryStart+0x0400+0x0100)=0 for A
+			*(char *)(MemoryStart+0x0400+0x0100)=1 for B
+		read BIOS\\BIOS.bin to MemoryStart+0xf0000, size=
+		DispInit
+		PICInit();
+		RTCInit();
+		FloppyInit();
+		HardDiskInit();
+		DMAInit();
+		PrinterInit();
+		SerialInit();
+		KeyBoardInit();
+		SystemTimerInit();
+	VMRun
+		CPURun:里面用一个for不断执行
+			ExecIns
+				根据当前ip:evIP得到内存中当前指令OpC
+				从InsTable[Opc]得到指令对应的函数的地址
+				执行该函数
+			RefreshVideoRAM
+
+	VMShutDown
+		CPUTerminate
+
+cpu虚拟主要文件为cpu/cpu.cpp, cpu/instructions.cpp
+struct CPU 定义了cpu的所有寄存器
+SetupInstructionTable用于设置InsTable, 
+
+消息响应,比如键盘,WM_PAINT等,在WndProc函数中(IO\Display.cpp)定义
+
+对于显示模块, 用了一条IO指令来代替整个INT 10H(out	0b0h,al. 在easyvmBIOS.asm说明),INT10H的具体程序在Display.cpp里实现
+
+OnPaint
+	TextBufOut
+		根据不同字符属性,将显存缓冲分成多个子字符串,分别显示
+		画光标
+

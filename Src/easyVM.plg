@@ -1,0 +1,33 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: easyVM - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\hjs\LOCALS~1\Temp\RSP199.tmp" with contents
+[
+/nologo /MLd /W3 /Gm /GX /ZI /Od /I "C:\Program Files\Microsoft SDKs\Windows\v6.0A\Include" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"Debug/easyVM.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
+"E:\test\easyVM_Small_\easyVM_Small\easyVM_Small\Src\easyVM.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\hjs\LOCALS~1\Temp\RSP199.tmp" 
+Creating temporary file "C:\DOCUME~1\hjs\LOCALS~1\Temp\RSP19A.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /pdb:"Debug/easyVM.pdb" /debug /machine:I386 /out:"Debug/easyVM.exe" /pdbtype:sept 
+.\Debug\easyVM.obj
+]
+Creating command line "link.exe @C:\DOCUME~1\hjs\LOCALS~1\Temp\RSP19A.tmp"
+<h3>Output Window</h3>
+Compiling...
+easyVM.cpp
+c:\program files\microsoft sdks\windows\v6.0a\include\specstrings.h(9) : fatal error C1083: Cannot open include file: 'sal.h': No such file or directory
+Error executing cl.exe.
+
+
+
+<h3>Results</h3>
+easyVM.exe - 1 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
